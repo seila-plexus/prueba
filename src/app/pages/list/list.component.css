@@ -1,0 +1,40 @@
+.main-content {
+    width: 80%;
+    margin:auto;
+    margin-top: 25px;
+    
+}
+
+
+table {
+    width: 100% !important;
+}
+
+
+table tr:nth-child(even) {
+	background: #f1e4c1;
+    
+} 
+
+table th {
+	background: #d7f1c1;
+    font-weight: bold;
+} 
+
+.mat-column-name {
+    width: auto !important;
+}
+
+.mat-column-price {
+    width: 10% !important;
+}
+
+.mat-column-actions {
+    width: 130px !important;
+    text-align: center;
+}
+
+button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

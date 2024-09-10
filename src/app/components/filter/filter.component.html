@@ -1,0 +1,5 @@
+<form [formGroup] = "filterForm">
+    <mat-form-field>
+        <input matInput placeholder="Find" formControlName="filter" (keyup) = "onChange($event)" id="filter_name" />
+    </mat-form-field>
+</form>

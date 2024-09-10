@@ -1,0 +1,49 @@
+<app-loading></app-loading>
+<div class="main-content">
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div>
+        <h1 *ngIf="productId">Edit product</h1>
+        <h1 *ngIf="!productId">New product</h1>
+    </div>
+    <div>
+        <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name" required/>
+            <mat-error *ngIf="productForm.get('name')?.invalid">Name is required</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input matInput type="number" placeholder="Price" formControlName="price" required/>
+            <mat-error *ngIf="productForm.get('price')?.invalid">Price is required</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input matInput placeholder="Description" formControlName="description" required/>
+        </mat-form-field>
+    </div>
+    <div>
+        @if (categories | async; as resultObject){
+            <mat-form-field>
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category">
+                    @for (category of resultObject; track category){
+                        <mat-option [value] ="category.id">{{category.name}}</mat-option>
+                    }
+                </mat-select>
+                <mat-error *ngIf="productForm.get('category')?.invalid">Category is required</mat-error>
+            </mat-form-field>
+        }
+    </div>
+    <div>
+        <mat-form-field>
+            <input matInput type="number" placeholder="Stock" formControlName="stock" required/>
+            <mat-error *ngIf="productForm.get('stock')?.invalid">Stock is required</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <button mat raised-button color="primary" type="submit">Save</button>
+        <button mat.button [routerLink]="['/products']">Cancel</button>
+    </div>
+</form>
+</div>
