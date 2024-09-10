@@ -24,6 +24,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { ConfirmComponent } from '../../shared/confirm/confirm.component';
 
 @Component({
   selector: 'app-list',
@@ -62,14 +63,14 @@ export class ListComponent implements OnInit {
 
 
   deleteProduct(id: string): void {
-   /* const dialogRef = this.dialog.open(ConfirmDeleteProduct);
+   const dialogRef = this.dialog.open(ConfirmComponent, {data: { tittle: 'Closed',}});
     dialogRef.afterClosed().subscribe(result => {
-      if (result){*/
+      if (result){
       this.productService.deleteProduct(id).subscribe(() => {
         this.products = this.getAllProducts();
         this._snackBar.open("Product removed", "", this.snackBarConfig)
       });
-    /*  }
-    });*/
+     }
+    });
   }
 }
