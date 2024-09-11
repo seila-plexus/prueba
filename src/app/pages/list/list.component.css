@@ -34,6 +34,28 @@ table th {
     text-align: center;
 }
 
+.div-filter {
+    display: inline-block;
+    width: 90%;
+}
+
+.div-add {
+    width: 10%;
+    text-align: right;
+    vertical-align: middle;
+    position: relative;
+    top: 5px;
+    float: right;
+}
+
+@media (max-width: 800px){
+    .div-filter {
+        width: 80%;
+    }
+    .div-add {
+        width: 20%;
+    }
+}
 button {
     margin-top: 5px;
     margin-bottom: 5px;

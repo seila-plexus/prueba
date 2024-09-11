@@ -1,0 +1,21 @@
+.filter-control {
+    width: 100%;
+}
+
+.form-fields {
+    display: flex;
+    align-items: flex-start;
+}
+
+.form-fields mat-form-field + mat-form-field {
+    margin-left: auto;
+}
+
+@media (max-width: 920px){
+    .form-fields mat-form-field{
+        width: 100%;
+    }
+    .form-fields {
+        display: block;
+    }
+}

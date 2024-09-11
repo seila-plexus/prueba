@@ -1,5 +1,26 @@
 <form [formGroup] = "filterForm">
-    <mat-form-field>
-        <input matInput placeholder="Find" formControlName="filter" (keyup) = "onChange($event)" id="filter_name" />
+    <mat-form-field class="filter-control">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Find Name" formControlName="name" (search) = "onChange($event)" (keyup) = "onChange($event)" id="filter_name" type="search" />
     </mat-form-field>
+    <div class="form-fields">
+        <mat-form-field class="controls">
+            <mat-label>Min price</mat-label>
+            <input matInput placeholder="Find min price" formControlName="price" (search) = "onChange($event)" (keyup) = "onChange($event)" id="filter_price" type="number" />
+        </mat-form-field>
+        <mat-form-field class="controls"></mat-form-field>
+            <mat-label>Min stock</mat-label>
+            <input matInput placeholder="Find min stock" formControlName="stock" (search) = "onChange($event)" (keyup) = "onChange($event)" id="filter_stock" type="number" />
+        </mat-form-field>
+        @if (categories | async; as resultObject){
+            <mat-form-field class="controls">
+                <mat-label>Min price</mat-label>
+                <mat-select formControlName="category" (ngModelChange)="onChange($event)"id="filter_category">
+                    @for (category of resultObject; track category){
+                        <mat-option [value]="category.id">{{category.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        }
+    </div>
 </form>

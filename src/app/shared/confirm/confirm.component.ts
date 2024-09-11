@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 
@@ -7,11 +7,9 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
   standalone: true,
   imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
   templateUrl: './confirm.component.html',
-  styleUrl: './confirm.component.css'
+  styleUrl: './confirm.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {name: string}) { }
-  ngOnInit(): void {
-   
-  }
+
 }

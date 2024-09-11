@@ -1,34 +1,59 @@
 import { Component, output } from '@angular/core';
-import { catchError, EMPTY, Observable } from 'rxjs';
-import { Product } from '../../core/models/product';
-import { ProductService } from '../../core/services/product.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Category, Product } from '../../core/models/product';
+import { ProductService } from '../../core/services/product.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { catchError } from 'rxjs';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-filter',
   standalone: true,
-  imports: [MatInputModule, MatFormFieldModule, FormsModule, ReactiveFormsModule],
+  imports: [MatInputModule, MatFormFieldModule, FormsModule, MatSelectModule, CommonModule, ReactiveFormsModule],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css'
 })
 export class FilterComponent {
-  [x: string]: any;
   filterProductEvent = output<Product>();
   filterForm: FormGroup;
-  filter: FormControl = new FormControl<string>('');
+
+  categories!: Observable<Category[]>;
 
   constructor(
     private fb: FormBuilder,
+    private productService: ProductService
   ) {
     this.filterForm = this.fb.group({
-      filter: ['', Validators.required]
+      name: [''],
+      price: [0],
+      stock: [0],
+      category: ['']
     });
   }
 
-  onChange($event: any):void {
-    this.filterProductEvent.emit(this.filterForm.controls["filter"].value);
+  ngOnInit(): void {
+    this.categories = this.getAllCategories();
+  }
+
+  getAllCategories() {
+    return this.productService.getCategories().pipe(catchError((error: string) => {
+      return EMPTY;
+    }));
+  }
+
+  onChange($event: any): void {
+    console.log("test");
+    let data: Product = {
+      name: this.filterForm.controls["name"].value,
+      price: this.filterForm.controls["price"].value,
+      stock: this.filterForm.controls["stock"].value,
+      category: this.filterForm.controls["category"].value
+    }
+    this.filterProductEvent.emit(data);
   }
 }

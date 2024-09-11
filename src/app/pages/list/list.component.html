@@ -1,7 +1,16 @@
 <app-loading></app-loading>
 <diV class="main-content">
-<app-filter (filterProductEvent)="filterProductHandle($event)"></app-filter>
-
+    <div>
+        <h1>Product List</h1>
+    </div>
+    <div class="div-add">
+        <app-filter (filterProductEvent)="filterProductHandle($event)"></app-filter>
+    </div>
+    <div class="div-filter"></div>
+        <button mat-fab color="primary" aria-label="Add" [routerLink]="['/products/new']">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
 @if (products | async; as resultObject) {
     <table mat-table [dataSource]="resultObject | filter:searchTerm()">
         <ng-container matColumnDef="name">
@@ -36,8 +45,10 @@
         <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'category', 'stock', 'actions'];"></tr>
     </table>
 }
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        aria.label="Select page of periodic elements">
+    </mat-paginator>
 </diV>
-<button mat-fab color="primary" aria-label="Add" [routerLink]="['/products/new']">
-    <mat-icon>add</mat-icon>
-</button>
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
