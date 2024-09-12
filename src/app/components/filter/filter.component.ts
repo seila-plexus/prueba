@@ -47,7 +47,6 @@ export class FilterComponent {
   }
 
   onChange($event: any): void {
-    console.log("test");
     let data: Product = {
       name: this.filterForm.controls["name"].value,
       price: this.filterForm.controls["price"].value,

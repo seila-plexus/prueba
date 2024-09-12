@@ -1,5 +1,4 @@
-
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, AfterViewInit, inject, signal, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { catchError } from 'rxjs';
 import { EMPTY } from 'rxjs';
@@ -11,39 +10,35 @@ import { LoadingComponent } from '../../components/loading/loading.component';
 import { Product } from '../../core/models/product';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FilterPipe } from "../../core/pipes/filter.pipe";
-import {
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { ConfirmComponent } from '../../shared/confirm/confirm.component';
-import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [CommonModule, AsyncPipe, FormsModule, RouterModule, MatTableModule,
-    MatFormFieldModule, MatIconModule, MatButtonModule, FilterComponent, LoadingComponent, FilterPipe, MatPaginator],
+    MatFormFieldModule, MatIconModule, MatButtonModule, FilterComponent, 
+    LoadingComponent, FilterPipe, MatPaginatorModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, AfterViewInit {
   products!: Observable<Product[]>;
   filterName = signal<string>("");
   filterPrice = signal<number>(0);
   filterStock = signal<number>(0);
   filterCategory = signal<string>("");
   
-  @viewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  
   dataSource = new MatTableDataSource<Product>();
   private _snackBar = inject(MatSnackBar);
   snackBarConfig: MatSnackBarConfig = {
@@ -54,15 +49,20 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.getAllProducts();
-    this.products.subscribe( products => {
-      if(this.paginator)
+    this.products.subscribe(products => {
+      this.dataSource.data = products;
+      if(this.paginator) {
         this.dataSource.paginator = this.paginator;
+      }
     });
   }
 
-  ngAfterViewInit(){
-    if(this.paginator) this.dataSource.paginator = this.paginator;
+  ngAfterViewInit() {
+    if(this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
+
   getAllProducts() {
     return this.productService.getProducts().pipe(catchError((error: string) => {
       return EMPTY;
@@ -74,25 +74,26 @@ export class ListComponent implements OnInit {
     this.filterPrice.set(event.price);
     this.filterStock.set(event.stock);
     this.filterCategory.set(event.category);
-    if(this.paginator) this.dataSource.paginator = this.paginator;
+    if(this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
-
   deleteProduct(id: string): void {
-   const dialogRef = this.dialog.open(ConfirmComponent);
+    const dialogRef = this.dialog.open(ConfirmComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if (result){
-      this.productService.deleteProduct(id).subscribe(() => {
-        this.products = this.getAllProducts();
-        this.products.subscribe(products =>{
-          this.dataSource.data = products;
-          if(this.paginator) this.dataSource.paginator = this.paginator;
+      if (result) {
+        this.productService.deleteProduct(id).subscribe(() => {
+          this.products = this.getAllProducts();
+          this.products.subscribe(products => {
+            this.dataSource.data = products;
+            if(this.paginator) {
+              this.dataSource.paginator = this.paginator;
+            }
+          });
+          this._snackBar.open("Product removed", "", this.snackBarConfig);
         });
-        this._snackBar.open("Product removed", "", this.snackBarConfig)
-      });
-      
-     }
+      }
     });
-
   }
 }

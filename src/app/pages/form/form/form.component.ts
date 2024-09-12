@@ -4,8 +4,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Observable } from 'rxjs/internal/Observable';
 import { catchError } from 'rxjs';
 import { EMPTY } from 'rxjs';
-import { ProductService } from '../../../core/services/product.service';
-import { Product, Category } from '../../../core/models/product';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -18,6 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { LoadingComponent } from '../../../components/loading/loading.component';
+import { Category, Product } from '../../../core/models/product';
+import { ProductService } from '../../../core/services/product.service';
 
 @Component({
   selector: 'app-form',

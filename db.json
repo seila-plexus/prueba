@@ -1,47 +1,46 @@
 {
-"products": [
+  "products": [
     {
-        "id": "1",
-        "name":"Milk",
-        "price":1.2,
-        "description": "",
-        "category": "1",
-        "stock": 20
+      "id": "1",
+      "name": "Milk",
+      "price": 1.2,
+      "description": "",
+      "category": "1",
+      "stock": 20
     },
     {
-        "id": "2",
-        "name":"Pan",
-        "price":1.0,
-        "description": "",
-        "category": "2",
-        "stock": 50
+      "id": "2",
+      "name": "Pan",
+      "price": 1,
+      "description": "",
+      "category": "2",
+      "stock": 50
     },
     {
-        "id": "3",
-        "name":"Vino",
-        "price":2.0,
-        "description": "",
-        "category": "2",
-        "stock": 50
+      "id": "3",
+      "name": "Vino",
+      "price": 2,
+      "description": "",
+      "category": "2",
+      "stock": 50
     },
-    
     {
-        "id": "4",
-        "name":"Vino",
-        "price":2.0,
-        "description": "",
-        "category": "2",
-        "stock": 0
+      "id": "4",
+      "name": "Vino",
+      "price": 2,
+      "description": "",
+      "category": "2",
+      "stock": 0
     }
-],
-"categories":[
+  ],
+  "categories": [
     {
-        "id": "1",
-        "name": "cat1"
+      "id": "1",
+      "name": "cat1"
     },
     {
-        "id": "2",
-        "name": "cat2"
+      "id": "2",
+      "name": "cat2"
     }
-]
+  ]
 }
