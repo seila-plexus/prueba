@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../core/services/product.service';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { LoadingComponent } from '../../components/loading/loading.component';
-import { Product } from '../../core/models/product';
+import { Product, Category } from '../../core/models/product';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FilterPipe } from "../../core/pipes/filter.pipe";
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { ConfirmComponent } from '../../shared/confirm/confirm.component';
@@ -32,6 +32,8 @@ import { ConfirmComponent } from '../../shared/confirm/confirm.component';
 })
 export class ListComponent implements OnInit, AfterViewInit {
   products!: Observable<Product[]>;
+  categories!: Observable<Category[]>;
+  
   filterName = signal<string>("");
   filterPrice = signal<number>(0);
   filterStock = signal<number>(0);
@@ -48,13 +50,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   constructor(private productService: ProductService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.products = this.getAllProducts();
-    this.products.subscribe(products => {
-      this.dataSource.data = products;
-      if(this.paginator) {
-        this.dataSource.paginator = this.paginator;
-      }
-    });
+    this.setProducts();
   }
 
   ngAfterViewInit() {
@@ -69,6 +65,30 @@ export class ListComponent implements OnInit, AfterViewInit {
     }));
   }
 
+  getAllCategories() {
+    return this.productService.getCategories().pipe(catchError((error: string) => {
+      return EMPTY;
+    }));
+  }
+
+  setProducts() {
+    this.categories = this.getAllCategories();
+    this.categories.subscribe(categories => {
+      this.products = this.getAllProducts();
+      this.products.subscribe(products => {
+        this.dataSource.data = products;
+        this.dataSource.data.forEach((element) => {
+          let catId = element.category? element.category : "0";
+          let catElement = categories.find((category) => category.id == catId);
+          element.category = catElement?.name;
+        });
+        if(this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+      });
+    });
+  }
+
   filterProductHandle(event: any) {
     this.filterName.set(event.name);
     this.filterPrice.set(event.price);
@@ -79,18 +99,18 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openConfirmDialog(): MatDialogRef<any> {
+    return this.dialog.open(ConfirmComponent, {
+      data: {title: "Delete product", message: "Would you like to delete this product?"},
+    });
+  }
+
   deleteProduct(id: string): void {
-    const dialogRef = this.dialog.open(ConfirmComponent);
+    const dialogRef = this.openConfirmDialog();
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.productService.deleteProduct(id).subscribe(() => {
-          this.products = this.getAllProducts();
-          this.products.subscribe(products => {
-            this.dataSource.data = products;
-            if(this.paginator) {
-              this.dataSource.paginator = this.paginator;
-            }
-          });
+          this.setProducts();
           this._snackBar.open("Product removed", "", this.snackBarConfig);
         });
       }

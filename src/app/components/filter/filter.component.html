@@ -6,18 +6,19 @@
     <div class="form-fields">
         <mat-form-field class="controls">
             <mat-label>Min price</mat-label>
-            <input matInput placeholder="Find min price" formControlName="price" (search) = "onChange($event)" (keyup) = "onChange($event)" id="filter_price" type="number" />
+            <input matInput placeholder="Find min price" formControlName="price" (change) = "onChange($event)" (keyup) = "onChange($event)" id="filter_price" type="number" />
         </mat-form-field>
         <mat-form-field class="controls">
             <mat-label>Min stock</mat-label>
-            <input matInput placeholder="Find min stock" formControlName="stock" (search) = "onChange($event)" (keyup) = "onChange($event)" id="filter_stock" type="number" />
+            <input matInput placeholder="Find min stock" formControlName="stock" (change) = "onChange($event)" (keyup) = "onChange($event)" id="filter_stock" type="number" />
         </mat-form-field>
         @if (categories | async; as resultObject){
             <mat-form-field class="controls">
-                <mat-label>Min price</mat-label>
-                <mat-select formControlName="category" (ngModelChange)="onChange($event)"id="filter_category">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category" (ngModelChange)="onChange($event) "id="filter_category">
+                    <mat-option>None</mat-option>
                     @for (category of resultObject; track category){
-                        <mat-option [value]="category.id">{{category.name}}</mat-option>
+                        <mat-option [value]="category.name">{{category.name}}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>

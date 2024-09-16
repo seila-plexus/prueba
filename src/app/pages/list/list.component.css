@@ -29,9 +29,21 @@ table th {
     width: 10% !important;
 }
 
+.mat-column-category {
+    width: 15% !important;
+}
+
+.mat-column-stock {
+    width: 10% !important;
+}
+
 .mat-column-actions {
     width: 130px !important;
     text-align: center;
+}
+
+.icon-pointer {
+    cursor: pointer;
 }
 
 .div-filter {

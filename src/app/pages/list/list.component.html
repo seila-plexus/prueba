@@ -11,8 +11,8 @@
             <mat-icon>add</mat-icon>
         </button>
     </div>
-@if (products | async; as resultObject) {
-    <table mat-table [dataSource]="dataSource | filter: filterName():filterPrice(): filterStock(): filterCategory()">
+    @if (products | async; as resultObject) {
+    <table mat-table [dataSource]="dataSource | filter: filterName(): filterPrice(): filterStock(): filterCategory()">
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name </th>
             <td mat-cell *matCellDef="let product"> {{product.name}} </td>
@@ -36,15 +36,15 @@
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let product">
-                <mat-icon [ngStyle]="{'color':'blue'}" [routerLink]="['/products/edit', product.id]">edit</mat-icon>
-                <mat-icon [ngStyle]="{'color':'red'}" (click)="deleteProduct(product.id)">delete</mat-icon>
+                <mat-icon [ngStyle]="{'color':'blue'}" [routerLink]="['/products/edit', product.id]" class="icon-pointer">edit</mat-icon>
+                <mat-icon [ngStyle]="{'color':'red'}" (click)="deleteProduct(product.id)" class="icon-pointer">delete</mat-icon>
             </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['name', 'price', 'actions']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'actions'];"></tr>
+        <tr mat-header-row *matHeaderRowDef="['name', 'price', 'category', 'stock', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'category', 'stock', 'actions'];"></tr>
     </table>
-}
+    }
     <mat-paginator [pageSizeOptions]="[5, 10, 20]"
         showFirstLastButtons
         aria.label="Select page of periodic elements">

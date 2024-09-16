@@ -18,6 +18,8 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { LoadingComponent } from '../../../components/loading/loading.component';
 import { Category, Product } from '../../../core/models/product';
 import { ProductService } from '../../../core/services/product.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmComponent } from '../../../shared/confirm/confirm.component';
 
 @Component({
   selector: 'app-form',
@@ -48,7 +50,8 @@ export class FormComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private dialog: MatDialog
   ) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
@@ -77,21 +80,38 @@ export class FormComponent implements OnInit {
     }));
   }
 
+  openConfirmDialog(): MatDialogRef<any> {
+    let titleAux = "Create new product";
+      let messageAux = "Would you like to create this new product?";
+      if (this.productId && this.productId != "0") {
+        titleAux = "Edit product";
+        messageAux = "Would you like to edit this product?";
+      }
+      return this.dialog.open(ConfirmComponent, {
+        data: {title: titleAux, message: messageAux},
+      });
+  }
+
   onSubmit(): void {
     if (this.productForm.valid) {
-      const product: Product = this.productForm.value;
-      if (this.productId && this.productId != "0") {
-        product.id = this.productId;
-        this.productService.updateProduct(product).subscribe(() => {
-          this._snackBar.open("Updated product", "", this.snackBarConfig);
-          this.router.navigate(['/products']);
-        });
-      } else {
-        this.productService.createProduct(product).subscribe((product) => {
-          this._snackBar.open("Product added", "", this.snackBarConfig);
-          this.router.navigate(['/products']);
-        });
-      }
+      const dialogRef = this.openConfirmDialog();
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          const product: Product = this.productForm.value;
+          if (this.productId && this.productId != "0") {
+            product.id = this.productId;
+            this.productService.updateProduct(product).subscribe(() => {
+              this._snackBar.open("Updated product", "", this.snackBarConfig);
+              this.router.navigate(['/products']);
+            });
+          } else {
+            this.productService.createProduct(product).subscribe((product) => {
+              this._snackBar.open("Product added", "", this.snackBarConfig);
+              this.router.navigate(['/products']);
+            });
+          }
+        }
+      });
     }
   }
 }
